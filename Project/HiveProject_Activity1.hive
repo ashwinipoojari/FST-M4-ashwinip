@@ -1,0 +1,25 @@
+hive> CREATE DATABASE project; 
+
+hive> USE PROJECT;
+
+hive> CREATE TABLE dialogues
+    > (name STRING, lines STRING)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+hive> LOAD DATA LOCAL INPATH '/root/project' INTO TABLE dialogues;
+
+hive> CREATE TABLE results AS
+    > SELECT name,COUNT(2) AS lines FROM dialogues
+    > GROUP BY name
+    > ORDER BY lines DESC;
+
+hive> SELECT * FROM results;
+
+hive> INSERT OVERWRITE DIRECTORY '/root/project/hiveresults'
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+    > SELECT * FROM project.results;
+
+hive> INSERT OVERWRITE LOCAL DIRECTORY '/root/project/results'
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+    > SELECT * FROM project.results;
+

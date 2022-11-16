@@ -1,0 +1,22 @@
+hive> USE project;
+
+hive> CREATE TABLE episodeIV
+> (name STRING, lines STRING)
+> ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
+hive> LOAD DATA LOCAL INPATH '/root/project/episodeIV_dialogues.txt' INTO TABLE episodeIV;
+
+hive> CREATE TABLE count AS
+> SELECT COUNT(lines) FROM episodeIV
+> WHERE lines LIKE '%Luke%';
+
+hive> select * from count;
+
+hive> INSERT OVERWRITE DIRECTORY '/root/project/hiveresults'
+> ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+> SELECT * FROM project.count;
+
+hive> INSERT OVERWRITE LOCAL DIRECTORY '/root/project/hiveresults'
+> ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+> SELECT * FROM project.count;
+
